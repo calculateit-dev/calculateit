@@ -1,0 +1,31 @@
+{
+  "name": "@calculateit/parser-js",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "dev": "vite build --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "expr-eval": "^2.0.2"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.10.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.7",
+    "vite-plugin-dts": "^4.5.1"
+  }
+}

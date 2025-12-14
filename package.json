@@ -1,0 +1,32 @@
+{
+  "name": "calculateit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@picocss/pico": "^2.0.6",
+    "@storybook/addon-a11y": "^10.1.8",
+    "@storybook/react-vite": "^10.1.8",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "storybook": "^10.1.8",
+    "turbo": "^2.6.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.7"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.25.0"
+}
