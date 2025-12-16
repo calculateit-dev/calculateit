@@ -4,22 +4,19 @@ on:
   release:
     types: [published]
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to publish (e.g., 0.1.0, 0.2.0-beta.1)'
-        required: true
-        type: string
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -39,22 +36,49 @@ jobs:
       - name: Run type check
         run: pnpm typecheck
 
+      - name: Run tests
+        run: pnpm test run
+
       - name: Build packages
         run: pnpm build
 
-      - name: Update version (manual trigger)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Get current version
+        id: current_version
         run: |
-          pnpm --filter "@calculateit/react" exec pnpm version ${{ inputs.version }} --no-git-tag-version
+          VERSION=$(node -p "require('./packages/react/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
         run: pnpm --filter "@calculateit/react" publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create release tag
+        run: |
+          git tag -a "v${{ steps.current_version.outputs.version }}" -m "Release v${{ steps.current_version.outputs.version }}"
+          git push origin "v${{ steps.current_version.outputs.version }}"
+
+      - name: Bump to next patch version
+        run: |
+          cd packages/react
+          pnpm version patch --no-git-tag-version
+
+      - name: Commit and push version bump
+        run: |
+          git add packages/react/package.json
+          git commit -m "chore: bump version to $(node -p "require('./packages/react/package.json').version") [skip ci]"
+          git push
+
       - name: Summary
         run: |
           echo "## 🎉 Published to npm" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Package published:" >> $GITHUB_STEP_SUMMARY
-          echo "- [@calculateit/react](https://www.npmjs.com/package/@calculateit/react)" >> $GITHUB_STEP_SUMMARY
+          echo "Published version: ${{ steps.current_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "Package: [@calculateit/react](https://www.npmjs.com/package/@calculateit/react)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Next version bumped to: $(node -p "require('./packages/react/package.json').version")" >> $GITHUB_STEP_SUMMARY

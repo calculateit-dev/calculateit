@@ -224,12 +224,12 @@ pnpm typecheck
 
 | Package                  | Description                  | Version |
 |--------------------------|------------------------------|---------|
-| `@calculateit/react`     | React components and hooks   | 0.1.0   |
-| `@calculateit/parser-js` | JavaScript expression parser | 0.1.0   |
+| `@calculateit/react`     | React components and hooks   | 1.0.0   |
+| `@calculateit/parser-js` | JavaScript expression parser | 1.0.0   |
     
 ## 📦 Publishing
 
-This project uses GitHub Actions to automatically publish packages to npm.
+This project uses GitHub Actions to automatically publish packages to npm with automatic version management.
 
 ### Setup
 
@@ -244,27 +244,22 @@ This project uses GitHub Actions to automatically publish packages to npm.
    - Create a new repository secret named `NPM_TOKEN`
    - Paste your npm token
 
-### Publishing
+### Publishing Workflow
 
-**Automatic (Recommended):**
-- Create a new [GitHub Release](../../releases/new)
-- The workflow will automatically publish to npm
+The publish workflow:
+1. Runs tests and builds
+2. Publishes the current version from `package.json`
+3. Creates a git tag for the release (`v1.0.0`)
+4. Auto-bumps to the next patch version (`1.0.0` → `1.0.1`)
+5. Commits and pushes the version bump
 
-**Manual:**
-- Go to Actions → Publish to npm → Run workflow
-- Enter the version number (e.g., `0.2.0` or `0.2.0-beta.1`)
-- Click "Run workflow"
+**To publish:**
+1. Ensure the version in `packages/react/package.json` is what you want to publish
+2. Trigger the workflow:
+   - **Automatic:** Create a new [GitHub Release](../../releases/new)
+   - **Manual:** Go to Actions → Publish to npm → Run workflow
 
-### Version Management
-
-Update the React package version before publishing:
-```bash
-# Update the React package version
-cd packages/react && pnpm version 0.2.0
-
-# Or using pnpm filter
-pnpm --filter "@calculateit/react" exec pnpm version 0.2.0
-```
+The workflow automatically handles version bumping to prevent conflicts between multiple engineers.
 
 ## 🤝 Contributing
 
