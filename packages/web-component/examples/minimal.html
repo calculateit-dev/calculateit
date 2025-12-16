@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate - Minimal</title>
+</head>
+<body>
+  <h1>Calculator</h1>
+
+  <!-- Web component with JSON data directly in attribute -->
+  <calculate
+    decimal-places="2"
+    show-formula
+    document-json='{"format":"markdown","sections":[{"name":"Budget","variables":[{"name":"income","expression":"5000","isInput":true},{"name":"expenses","expression":"3000","isInput":true},{"name":"savings","expression":"income - expenses","isInput":false}],"level":1,"hidden":false}],"variables":[{"name":"income","expression":"5000","isInput":true},{"name":"expenses","expression":"3000","isInput":true},{"name":"savings","expression":"income - expenses","isInput":false}],"inputVariables":["income","expenses"]}'>
+  </calculate>
+
+  <!-- Only need this to load the component -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@calculateit/web-component@1/+esm"></script>
+</body>
+</html>

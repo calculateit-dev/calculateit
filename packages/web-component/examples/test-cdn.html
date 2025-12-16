@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Web Component - jsDeliver CDN</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-top: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #667eea;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    calculate {
+      margin: 2rem 0;
+    }
+
+    .output {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .output h3 {
+      margin-top: 0;
+      font-family: system-ui;
+    }
+
+    pre {
+      background: #1a1a1a;
+      color: #4ade80;
+      padding: 0.75rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #4ade80;
+      color: #1a1a1a;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: #e9ecef;
+      color: #495057;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: monospace;
+      margin: 0 0.25rem;
+    }
+
+    .info {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .info p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="status">🚀 CDN Version</span>
+    <h1>Web Component Test - jsDeliver</h1>
+
+    <div class="info">
+      <p><strong>📦 Loading from:</strong></p>
+      <p>
+        <span class="badge">cdn.jsdelivr.net/npm/@calculateit/web-component@latest</span>
+      </p>
+      <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+        ✨ Everything bundled (Lit + Parser) - no other dependencies needed!
+      </p>
+    </div>
+
+    <p>Testing <code>&lt;calculate-it&gt;</code> web component loaded from jsDeliver CDN - no build tools required!</p>
+
+    <div class="controls">
+      <button onclick="setTheme('default')">Default Theme</button>
+      <button onclick="setTheme('dark')">Dark Mode</button>
+      <button onclick="setTheme('gradient')">Gradient</button>
+      <button onclick="setFormatter('default')">Default Format</button>
+      <button onclick="setFormatter('currency')">Currency</button>
+      <button onclick="setFormatter('percentage')">Percentage</button>
+      <button onclick="setFormatter('compact')">Compact</button>
+      <button onclick="updateValues()">Update Values</button>
+      <button onclick="toggleFormulas()">Toggle Formulas</button>
+    </div>
+
+    <calculate-it id="calc" decimal-places="2" markdown="
+# Financial Calculator
+
+## Income
+monthly_income = 8000
+side_income = 1500
+total_income = monthly_income + side_income
+
+## Expenses
+rent = 2000
+utilities = 300
+groceries = 600
+transport = 200
+entertainment = 400
+total_expenses = rent + utilities + groceries + transport + entertainment
+
+## Savings
+net_income = total_income - total_expenses
+savings_rate = 20
+monthly_savings = net_income * (savings_rate / 100)
+available_spending = net_income - monthly_savings
+
+## Annual Projections
+annual_savings = monthly_savings * 12
+annual_income = total_income * 12
+    "></calculate>
+
+    <div class="output">
+      <h3>📊 Event Output</h3>
+      <pre id="output">Waiting for events...</pre>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import from jsDeliver CDN - everything is bundled!
+    import 'https://cdn.jsdelivr.net/npm/@calculateit/web-component@latest/+esm';
+
+    const calc = document.getElementById('calc');
+    const output = document.getElementById('output');
+
+    // Wait for component to initialize
+    setTimeout(() => {
+      try {
+        // Listen to events
+        calc.addEventListener('values-change', (e) => {
+          updateOutput('📥 Values Changed', e.detail.values);
+        });
+
+        calc.addEventListener('calculations-change', (e) => {
+          updateOutput('🧮 Calculations Updated', e.detail.calculations);
+        });
+
+        // Initial output
+        const values = calc.getValues();
+        const calculations = calc.getCalculations();
+        updateOutput('✅ Loaded from CDN (parser bundled)', { values, calculations });
+
+        console.log('✅ Successfully loaded from jsDeliver CDN');
+      } catch (error) {
+        output.textContent = '❌ Error: ' + error.message;
+        console.error('Error:', error);
+      }
+    }, 100);
+
+    function updateOutput(title, data) {
+      const formatted = JSON.stringify(data, null, 2);
+      output.textContent = `${title}\n\n${formatted}`;
+    }
+
+    // Theme functions
+    window.setTheme = (theme) => {
+      calc.className = '';
+
+      if (theme === 'dark') {
+        calc.style.setProperty('--calculate-bg-color', '#1a1a1a');
+        calc.style.setProperty('--calculate-text-color', '#e5e5e5');
+        calc.style.setProperty('--calculate-input-bg', '#2d2d2d');
+        calc.style.setProperty('--calculate-input-border', '#404040');
+        calc.style.setProperty('--calculate-input-text', '#e5e5e5');
+        calc.style.setProperty('--calculate-result-bg', '#1e3a20');
+        calc.style.setProperty('--calculate-result-color', '#4ade80');
+      } else if (theme === 'gradient') {
+        calc.style.setProperty('--calculate-result-bg', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+        calc.style.setProperty('--calculate-result-color', 'white');
+        calc.style.setProperty('--calculate-border-radius', '12px');
+      } else {
+        // Reset to defaults
+        calc.style.removeProperty('--calculate-bg-color');
+        calc.style.removeProperty('--calculate-text-color');
+        calc.style.removeProperty('--calculate-input-bg');
+        calc.style.removeProperty('--calculate-input-border');
+        calc.style.removeProperty('--calculate-input-text');
+        calc.style.removeProperty('--calculate-result-bg');
+        calc.style.removeProperty('--calculate-result-color');
+        calc.style.removeProperty('--calculate-border-radius');
+      }
+    };
+
+    window.setFormatter = (formatter) => {
+      calc.formatter = formatter;
+    };
+
+    window.updateValues = () => {
+      calc.setValues({
+        monthly_income: 10000,
+        side_income: 2000,
+        rent: 2500,
+        savings_rate: 30
+      });
+    };
+
+    window.toggleFormulas = () => {
+      calc.showFormula = !calc.showFormula;
+    };
+
+    // Log initial state
+    console.log('🎯 Web Component Loaded from jsDeliver CDN');
+    console.log('Component:', calc);
+  </script>
+</body>
+</html>

@@ -43,6 +43,6 @@ export { parseFile, ExpressionEvaluator, evaluateExpression } from '@calculateit
 // Auto-register custom element
 import { CalculateElement } from './calculate-element.js';
 
-if (typeof window !== 'undefined' && !customElements.get('calculate')) {
-  customElements.define('calculate', CalculateElement);
+if (typeof window !== 'undefined' && !customElements.get('calculate-it')) {
+  customElements.define('calculate-it', CalculateElement);
 }

@@ -12,7 +12,7 @@ import { styles } from './styles.js';
  * Calculate Web Component
  * Platform-agnostic calculator component built with Lit
  *
- * @element calculate
+ * @element calculate-it
  *
  * @fires values-change - Fired when input values change
  * @fires calculations-change - Fired when calculations update
@@ -28,7 +28,7 @@ import { styles } from './styles.js';
  * @cssprop --calculate-border-radius - Border radius
  * ... and 20+ more CSS custom properties
  */
-@customElement('calculate')
+@customElement('calculate-it')
 export class CalculateElement extends LitElement {
   static styles = styles;
 
@@ -376,6 +376,6 @@ export class CalculateElement extends LitElement {
 // TypeScript type augmentation
 declare global {
   interface HTMLElementTagNameMap {
-    'calculate': CalculateElement;
+    'calculate-it': CalculateElement;
   }
 }
