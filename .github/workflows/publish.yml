@@ -13,6 +13,12 @@ jobs:
       id-token: write
 
     steps:
+      - name: Verify branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Publishing is only allowed from the main branch"
+          exit 1
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -48,30 +54,40 @@ jobs:
           VERSION=$(node -p "require('./packages/react/package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Publish to npm
-        run: pnpm --filter "@calculateit/react" publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Configure git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Publish @calculateit/react to npm
+        run: pnpm --filter "@calculateit/react" publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @calculateit/web-component to npm
+        run: pnpm --filter "@calculateit/web-component" publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release tag
         run: |
           git tag -a "v${{ steps.current_version.outputs.version }}" -m "Release v${{ steps.current_version.outputs.version }}"
           git push origin "v${{ steps.current_version.outputs.version }}"
 
-      - name: Bump to next patch version
+      - name: Bump React package version
         run: |
           cd packages/react
           pnpm version patch --no-git-tag-version
 
-      - name: Commit and push version bump
+      - name: Bump Web Component package version
         run: |
-          git add packages/react/package.json
-          git commit -m "chore: bump version to $(node -p "require('./packages/react/package.json').version") [skip ci]"
+          cd packages/web-component
+          pnpm version patch --no-git-tag-version
+
+      - name: Commit and push version bumps
+        run: |
+          git add packages/react/package.json packages/web-component/package.json
+          git commit -m "chore: bump versions to $(node -p "require('./packages/react/package.json').version") [skip ci]"
           git push
 
       - name: Summary
@@ -79,6 +95,9 @@ jobs:
           echo "## 🎉 Published to npm" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Published version: ${{ steps.current_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "Package: [@calculateit/react](https://www.npmjs.com/package/@calculateit/react)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Packages" >> $GITHUB_STEP_SUMMARY
+          echo "- [@calculateit/react](https://www.npmjs.com/package/@calculateit/react)" >> $GITHUB_STEP_SUMMARY
+          echo "- [@calculateit/web-component](https://www.npmjs.com/package/@calculateit/web-component)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Next version bumped to: $(node -p "require('./packages/react/package.json').version")" >> $GITHUB_STEP_SUMMARY

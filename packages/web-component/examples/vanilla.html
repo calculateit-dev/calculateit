@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculate Web Component - Vanilla JS Example</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1 {
+      color: #333;
+    }
+    .controls {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    button {
+      margin-right: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #0066cc;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0052a3;
+    }
+    #output {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculate Web Component - Vanilla JS</h1>
+  <p>Interactive calculator built with pure Lit web component</p>
+
+  <div class="controls">
+    <button id="btn-currency">Use Currency Format</button>
+    <button id="btn-default">Use Default Format</button>
+    <button id="btn-percentage">Use Percentage Format</button>
+    <button id="btn-set-values">Set Custom Values</button>
+  </div>
+
+  <!-- Web Component -->
+  <calculate id="calc" decimal-places="2"></calculate>
+
+  <div id="output"></div>
+
+  <script type="module">
+    import { parseFile } from '@calculateit/parser-js';
+    import '@calculateit/web-component';
+
+    // Sample markdown calculator
+    const markdown = `
+# Investment Calculator
+
+## Initial Investment
+principal = 10000
+rate = 5.5
+years = 10
+
+## Calculations
+monthly_rate = rate / 12 / 100
+months = years * 12
+future_value = principal * (1 + rate / 100) ^ years
+total_gain = future_value - principal
+`;
+
+    // Parse the markdown
+    const result = parseFile(markdown, 'calculator.md');
+
+    if (result.success && result.data) {
+      // Get the calculate element
+      const calc = document.getElementById('calc');
+
+      // Set the document
+      calc.document = result.data;
+
+      // Listen to events
+      calc.addEventListener('values-change', (e) => {
+        console.log('Values changed:', e.detail.values);
+        updateOutput('Input values changed', e.detail.values);
+      });
+
+      calc.addEventListener('calculations-change', (e) => {
+        console.log('Calculations changed:', e.detail.calculations);
+        updateOutput('Calculations updated', e.detail.calculations);
+      });
+
+      // Button handlers
+      document.getElementById('btn-currency').addEventListener('click', () => {
+        calc.formatter = 'currency';
+      });
+
+      document.getElementById('btn-default').addEventListener('click', () => {
+        calc.formatter = 'default';
+      });
+
+      document.getElementById('btn-percentage').addEventListener('click', () => {
+        // Use custom formatter for percentage
+        calc.formatResult = (value) => `${(value * 100).toFixed(2)}%`;
+      });
+
+      document.getElementById('btn-set-values').addEventListener('click', () => {
+        calc.setValues({
+          principal: 50000,
+          rate: 7.5,
+          years: 15
+        });
+      });
+    } else {
+      console.error('Parse error:', result.error);
+    }
+
+    function updateOutput(message, data) {
+      const output = document.getElementById('output');
+      output.innerHTML = `
+        <strong>${message}</strong><br>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      `;
+    }
+  </script>
+</body>
+</html>

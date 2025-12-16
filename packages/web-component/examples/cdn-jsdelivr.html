@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculate Web Component - jsDeliver CDN Example</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-top: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #667eea;
+      color: white;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    calculate {
+      margin: 2rem 0;
+    }
+
+    .info {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      font-size: 0.875rem;
+    }
+
+    code {
+      background: #e9ecef;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+
+    pre {
+      background: #1a1a1a;
+      color: #e5e5e5;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">🚀 CDN Example</span>
+    <h1>Calculate Web Component via jsDeliver</h1>
+    <p>
+      This example demonstrates loading the web component directly from
+      <strong>jsDeliver CDN</strong> - no build tools required!
+    </p>
+
+    <!-- The web component -->
+    <calculate id="calc" decimal-places="2" show-formula></calculate>
+
+    <div class="info">
+      <h3>💡 How it works</h3>
+      <p>
+        The web component and parser are loaded directly from npm via jsDeliver CDN.
+        This makes it incredibly easy to create interactive calculators without any build setup.
+      </p>
+
+      <h4>Usage in your HTML:</h4>
+      <pre><code>&lt;!-- Load from jsDeliver CDN --&gt;
+&lt;script type="module"&gt;
+  import { parseFile } from
+    'https://cdn.jsdelivr.net/npm/@calculateit/parser-js/+esm';
+  import 'https://cdn.jsdelivr.net/npm/@calculateit/web-component/+esm';
+
+  const markdown = \`
+# My Calculator
+value = 100
+tax_rate = 7.5
+tax_amount = value * (tax_rate / 100)
+total = value + tax_amount
+  \`;
+
+  const result = parseFile(markdown, 'calc.md');
+  document.querySelector('calculate').document = result.data;
+&lt;/script&gt;
+
+&lt;calculate decimal-places="2"&gt;&lt;/calculate&gt;</code></pre>
+    </div>
+  </div>
+
+  <!-- Load from jsDeliver CDN -->
+  <script type="module">
+    // Import from CDN - no build tools needed!
+    import { parseFile } from 'https://cdn.jsdelivr.net/npm/@calculateit/parser-js/+esm';
+    import 'https://cdn.jsdelivr.net/npm/@calculateit/web-component/+esm';
+
+    // Define your calculator in markdown
+    const markdown = `
+# Investment Portfolio Calculator
+
+## Initial Investment
+principal = 50000
+annual_rate = 7.5
+years = 10
+
+## Monthly Calculations
+monthly_rate = annual_rate / 12 / 100
+months = years * 12
+
+## Future Value Calculation
+future_value = principal * (1 + annual_rate / 100) ^ years
+total_gain = future_value - principal
+annual_gain = total_gain / years
+monthly_gain = annual_gain / 12
+
+## ROI Metrics
+roi_percentage = (total_gain / principal) * 100
+    `;
+
+    // Parse the markdown
+    const result = parseFile(markdown, 'investment.md');
+
+    // Get the calculate element and set its document
+    const calc = document.getElementById('calc');
+
+    if (result.success && result.data) {
+      calc.document = result.data;
+
+      // Apply custom styling via CSS variables
+      calc.style.setProperty('--calculate-result-bg', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+      calc.style.setProperty('--calculate-result-color', 'white');
+      calc.style.setProperty('--calculate-border-radius', '12px');
+
+      // Listen to changes
+      calc.addEventListener('calculations-change', (e) => {
+        console.log('Portfolio value updated:', e.detail.calculations);
+      });
+
+      calc.addEventListener('values-change', (e) => {
+        console.log('Input values changed:', e.detail.values);
+      });
+    } else {
+      console.error('Parse error:', result.error);
+    }
+  </script>
+</body>
+</html>

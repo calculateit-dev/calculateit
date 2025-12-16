@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculate Web Component - React Example</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19",
+        "react-dom/client": "https://esm.sh/react-dom@19/client",
+        "@calculateit/parser-js": "/packages/parsers/js/dist/index.js",
+        "@calculateit/web-component": "/packages/web-component/dist/index.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import React, { useRef, useEffect, useState } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { parseFile } from '@calculateit/parser-js';
+    import '@calculateit/web-component';
+
+    function App() {
+      const calcRef = useRef(null);
+      const [values, setValues] = useState({});
+      const [calculations, setCalculations] = useState({});
+
+      useEffect(() => {
+        const markdown = `
+# Crypto Portfolio
+
+## Holdings
+btc = 0.5
+eth = 5
+sol = 100
+
+## Prices (USD)
+btc_price = 45000
+eth_price = 2500
+sol_price = 100
+
+## Portfolio Value
+btc_value = btc * btc_price
+eth_value = eth * eth_price
+sol_value = sol * sol_price
+total_value = btc_value + eth_value + sol_value
+`;
+
+        const result = parseFile(markdown, 'crypto.md');
+
+        if (calcRef.current && result.success && result.data) {
+          calcRef.current.document = result.data;
+          calcRef.current.formatter = 'currency';
+
+          // Set up callbacks
+          calcRef.current.onValuesChange = (vals) => {
+            setValues(vals);
+          };
+
+          calcRef.current.onCalculationsChange = (calcs) => {
+            setCalculations(calcs);
+          };
+        }
+      }, []);
+
+      const updatePrices = () => {
+        calcRef.current?.setValues({
+          btc_price: 50000,
+          eth_price: 3000,
+          sol_price: 150
+        });
+      };
+
+      return React.createElement('div', null,
+        React.createElement('h1', null, 'Calculate Web Component in React'),
+        React.createElement('p', null, 'Using web component inside React with ref'),
+
+        React.createElement('button', {
+          onClick: updatePrices,
+          style: {
+            padding: '0.5rem 1rem',
+            marginBottom: '1rem',
+            background: '#0066cc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }
+        }, 'Update Crypto Prices'),
+
+        React.createElement('calculate', {
+          ref: calcRef,
+          'decimal-places': 2,
+          'show-formula': true
+        }),
+
+        React.createElement('div', {
+          style: {
+            marginTop: '2rem',
+            padding: '1rem',
+            background: '#f5f5f5',
+            borderRadius: '8px'
+          }
+        },
+          React.createElement('h3', null, 'React State (from events)'),
+          React.createElement('p', null, `Total Portfolio: $${calculations.total_value?.toFixed(2) || '0.00'}`)
+        )
+      );
+    }
+
+    const root = createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
