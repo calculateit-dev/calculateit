@@ -1,6 +1,6 @@
 {
   "name": "@calculateit/web-component",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Platform-agnostic web component for interactive calculators built with Lit",
   "type": "module",
   "main": "./dist/index.cjs",
