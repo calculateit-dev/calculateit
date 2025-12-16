@@ -17,9 +17,8 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
-      // Externalize parser-js and expr-eval (workspace dependencies)
-      // Bundle Lit for standalone usage
-      external: ['@calculateit/parser-js', 'expr-eval'],
+      // Bundle everything for standalone usage
+      external: [],
     },
     minify: 'esbuild',
   },

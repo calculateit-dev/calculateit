@@ -19,7 +19,9 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@calculateit/parser-js', '@radix-ui/react-label', 'expr-eval'],
+      // Only externalize React and Radix UI (peer dependencies)
+      // Bundle parser-js for standalone usage
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@radix-ui/react-label'],
       output: {
         globals: {
           react: 'React',
