@@ -45,10 +45,10 @@ jobs:
       - name: Update version (manual trigger)
         if: github.event_name == 'workflow_dispatch'
         run: |
-          pnpm --filter "@calculateit/*" exec pnpm version ${{ inputs.version }} --no-git-tag-version
+          pnpm --filter "@calculateit/react" exec pnpm version ${{ inputs.version }} --no-git-tag-version
 
       - name: Publish to npm
-        run: pnpm --filter "@calculateit/*" publish --access public --no-git-checks
+        run: pnpm --filter "@calculateit/react" publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -56,6 +56,5 @@ jobs:
         run: |
           echo "## 🎉 Published to npm" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Packages published:" >> $GITHUB_STEP_SUMMARY
+          echo "Package published:" >> $GITHUB_STEP_SUMMARY
           echo "- [@calculateit/react](https://www.npmjs.com/package/@calculateit/react)" >> $GITHUB_STEP_SUMMARY
-          echo "- [@calculateit/parser-js](https://www.npmjs.com/package/@calculateit/parser-js)" >> $GITHUB_STEP_SUMMARY

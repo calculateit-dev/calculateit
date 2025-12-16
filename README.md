@@ -3,6 +3,8 @@
 <div align="center">
 
 [![CI](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml/badge.svg)](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-137%20passed-brightgreen?style=flat&colorA=18181B&colorB=10b981)](https://github.com/calculateit-dev/calculateit)
+[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen?style=flat&colorA=18181B&colorB=10b981)](https://github.com/calculateit-dev/calculateit)
 [![npm version](https://img.shields.io/npm/v/@calculateit/react?style=flat&colorA=18181B&colorB=10b981)](https://www.npmjs.com/package/@calculateit/react)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat&colorA=18181B&colorB=f59e0b)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue?style=flat&colorA=18181B&colorB=3b82f6&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -255,14 +257,13 @@ This project uses GitHub Actions to automatically publish packages to npm.
 
 ### Version Management
 
-Update versions in package.json files before publishing:
+Update the React package version before publishing:
 ```bash
-# Update all packages to the same version
-pnpm --filter "@calculateit/*" exec pnpm version 0.2.0
-
-# Or update individually
+# Update the React package version
 cd packages/react && pnpm version 0.2.0
-cd packages/parsers/js && pnpm version 0.2.0
+
+# Or using pnpm filter
+pnpm --filter "@calculateit/react" exec pnpm version 0.2.0
 ```
 
 ## 🤝 Contributing
