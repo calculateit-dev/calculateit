@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![CI](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml/badge.svg)](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@calculateit/react?style=flat&colorA=18181B&colorB=10b981)](https://www.npmjs.com/package/@calculateit/react)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat&colorA=18181B&colorB=f59e0b)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue?style=flat&colorA=18181B&colorB=3b82f6&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -224,9 +225,51 @@ pnpm typecheck
 | `@calculateit/react`     | React components and hooks   | 0.1.0   |
 | `@calculateit/parser-js` | JavaScript expression parser | 0.1.0   |
     
+## 📦 Publishing
+
+This project uses GitHub Actions to automatically publish packages to npm.
+
+### Setup
+
+1. **Create an npm access token:**
+   - Go to [npmjs.com](https://www.npmjs.com/) and log in
+   - Navigate to Access Tokens → Generate New Token
+   - Choose "Automation" type
+   - Copy the token
+
+2. **Add token to GitHub:**
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Create a new repository secret named `NPM_TOKEN`
+   - Paste your npm token
+
+### Publishing
+
+**Automatic (Recommended):**
+- Create a new [GitHub Release](../../releases/new)
+- The workflow will automatically publish to npm
+
+**Manual:**
+- Go to Actions → Publish to npm → Run workflow
+- Enter the version number (e.g., `0.2.0` or `0.2.0-beta.1`)
+- Click "Run workflow"
+
+### Version Management
+
+Update versions in package.json files before publishing:
+```bash
+# Update all packages to the same version
+pnpm --filter "@calculateit/*" exec pnpm version 0.2.0
+
+# Or update individually
+cd packages/react && pnpm version 0.2.0
+cd packages/parsers/js && pnpm version 0.2.0
+```
+
 ## 🤝 Contributing
 
 We love contributions! Whether it's bug fixes, new features, or documentation improvements—all PRs are welcome.
+
+All pull requests are automatically validated with CI checks (type checking, builds, Storybook).
 
 ## 📄 License
 
