@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![CI](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml/badge.svg)](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml)
+[![CI](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/calculateit-dev/calculateit/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-137%20passed-brightgreen?style=flat&colorA=18181B&colorB=10b981)](https://github.com/calculateit-dev/calculateit)
 [![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen?style=flat&colorA=18181B&colorB=10b981)](https://github.com/calculateit-dev/calculateit)
 [![npm version](https://img.shields.io/npm/v/@calculateit/react?style=flat&colorA=18181B&colorB=10b981)](https://www.npmjs.com/package/@calculateit/react)
