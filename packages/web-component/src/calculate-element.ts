@@ -255,16 +255,34 @@ export class CalculateElement extends LitElement {
 
   private renderSection(section: Section) {
     const headingLevel = Math.min(Math.max(section.level || 3, 1), 6);
-    const HeadingTag = `h${headingLevel}` as const;
 
     return html`
       <section class="section">
-        <${HeadingTag}>${section.name}</${HeadingTag}>
+        ${this.renderHeading(section.name, headingLevel)}
         <div class="section-content">
           ${section.variables.map((variable) => this.renderVariable(variable))}
         </div>
       </section>
     `;
+  }
+
+  private renderHeading(name: string, level: number) {
+    switch (level) {
+      case 1:
+        return html`<h1>${name}</h1>`;
+      case 2:
+        return html`<h2>${name}</h2>`;
+      case 3:
+        return html`<h3>${name}</h3>`;
+      case 4:
+        return html`<h4>${name}</h4>`;
+      case 5:
+        return html`<h5>${name}</h5>`;
+      case 6:
+        return html`<h6>${name}</h6>`;
+      default:
+        return html`<h3>${name}</h3>`;
+    }
   }
 
   private renderVariable(variable: Variable) {
