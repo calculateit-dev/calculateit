@@ -1,5 +1,16 @@
 # ⚡ CalculateIt
 
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/@calculateit/react?style=flat&colorA=18181B&colorB=10b981)](https://www.npmjs.com/package/@calculateit/react)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat&colorA=18181B&colorB=f59e0b)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue?style=flat&colorA=18181B&colorB=3b82f6&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19+-61dafb?style=flat&colorA=18181B&colorB=06b6d4&logo=react&logoColor=white)](https://react.dev/)
+[![pnpm](https://img.shields.io/badge/maintained%20with-pnpm-cc3534.svg?style=flat&colorA=18181B&colorB=f97316&logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Turbo](https://img.shields.io/badge/built%20with-Turbo-ef4444?style=flat&colorA=18181B&colorB=ef4444)](https://turbo.build/)
+
+</div>
+
 > Define calculators in plain text. Get interactive UIs for free.
 
 **CalculateIt** introduces **CalculateIt Flavored Markdown (CTFM)**—a revolutionary way to build interactive calculators using nothing but text. Write formulas in markdown, get a beautiful, reactive calculator UI instantly. No JSON schemas, no complex configurations, just pure, readable text.
@@ -208,11 +219,11 @@ pnpm typecheck
 
 ## 📦 Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| `@calculateit/react` | React components and hooks | 0.1.0 |
-| `@calculateit/parser-js` | JavaScript expression parser | 0.1.0 |
-
+| Package                  | Description                  | Version |
+|--------------------------|------------------------------|---------|
+| `@calculateit/react`     | React components and hooks   | 0.1.0   |
+| `@calculateit/parser-js` | JavaScript expression parser | 0.1.0   |
+    
 ## 🤝 Contributing
 
 We love contributions! Whether it's bug fixes, new features, or documentation improvements—all PRs are welcome.
