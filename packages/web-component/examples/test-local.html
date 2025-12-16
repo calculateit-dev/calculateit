@@ -113,24 +113,7 @@
       <button onclick="toggleFormulas()">Toggle Formulas</button>
     </div>
 
-    <calculate-it id="calc" decimal-places="2"></calculate-it>
-
-    <div class="output">
-      <h3>📊 Event Output</h3>
-      <pre id="output">Waiting for events...</pre>
-    </div>
-  </div>
-
-  <script type="module">
-    // Import from local build files
-    import { parseFile } from '../../parsers/js/dist/index.js';
-    import '../dist/index.js';
-
-    const calc = document.getElementById('calc');
-    const output = document.getElementById('output');
-
-    // Calculator markdown
-    const markdown = `
+    <calculate-it id="calc" decimal-places="2" markdown="
 # Financial Calculator
 
 ## Income
@@ -155,32 +138,44 @@ available_spending = net_income - monthly_savings
 ## Annual Projections
 annual_savings = monthly_savings * 12
 annual_income = total_income * 12
-`;
+    "></calculate-it>
 
-    // Parse and load
-    const result = parseFile(markdown, 'finance.md');
+    <div class="output">
+      <h3>📊 Event Output</h3>
+      <pre id="output">Waiting for events...</pre>
+    </div>
+  </div>
 
-    if (result.success && result.data) {
-      calc.document = result.data;
+  <script type="module">
+    // Import from local build - parser is bundled!
+    import '../dist/index.js';
 
-      // Listen to events
-      calc.addEventListener('values-change', (e) => {
-        updateOutput('📥 Values Changed', e.detail.values);
-      });
+    const calc = document.getElementById('calc');
+    const output = document.getElementById('output');
 
-      calc.addEventListener('calculations-change', (e) => {
-        updateOutput('🧮 Calculations Updated', e.detail.calculations);
-      });
+    // Wait for component to initialize
+    setTimeout(() => {
+      try {
+        // Listen to events
+        calc.addEventListener('values-change', (e) => {
+          updateOutput('📥 Values Changed', e.detail.values);
+        });
 
-      // Initial output
-      setTimeout(() => {
+        calc.addEventListener('calculations-change', (e) => {
+          updateOutput('🧮 Calculations Updated', e.detail.calculations);
+        });
+
+        // Initial output
         const values = calc.getValues();
         const calculations = calc.getCalculations();
-        updateOutput('✅ Component Loaded', { values, calculations });
-      }, 100);
-    } else {
-      output.textContent = '❌ Parse Error: ' + result.error;
-    }
+        updateOutput('✅ Component Loaded (local build)', { values, calculations });
+
+        console.log('✅ Successfully loaded from local build');
+      } catch (error) {
+        output.textContent = '❌ Error: ' + error.message;
+        console.error('Error:', error);
+      }
+    }, 100);
 
     function updateOutput(title, data) {
       const formatted = JSON.stringify(data, null, 2);

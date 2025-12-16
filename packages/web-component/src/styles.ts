@@ -203,13 +203,18 @@ export const styles = css`
     transition: all 0.2s ease;
     font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.5);
+    background: transparent;
   }
 
   .input-field input:focus + .input-label,
   .input-field input.has-value + .input-label {
-    top: 0.25rem;
+    top: -0.625rem;
     font-size: 0.75rem;
     transform: translateY(0);
+    background: var(--calculate-bg-color);
+    padding: 0 0.25rem;
+    color: rgba(0, 0, 0, 0.7);
+    left: calc(var(--calculate-input-padding) - 0.25rem);
   }
 
   /* Input Result Display */
