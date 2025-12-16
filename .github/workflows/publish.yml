@@ -1,9 +1,9 @@
 name: Publish to npm
 
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   publish:
@@ -13,11 +13,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Verify branch
-        if: github.ref != 'refs/heads/main'
-        run: |
-          echo "::error::Publishing is only allowed from the main branch"
-          exit 1
 
       - name: Checkout code
         uses: actions/checkout@v4
