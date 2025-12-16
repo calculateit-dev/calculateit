@@ -1,0 +1,236 @@
+# ⚡ CalculateIt
+
+> Define calculators in plain text. Get interactive UIs for free.
+
+**CalculateIt** introduces **CalculateIt Flavored Markdown (CTFM)**—a revolutionary way to build interactive calculators using nothing but text. Write formulas in markdown, get a beautiful, reactive calculator UI instantly. No JSON schemas, no complex configurations, just pure, readable text.
+
+## 💡 Meet CalculateIt Flavored Markdown (CTFM)
+
+**Stop writing calculator UIs. Start writing calculator documents.**
+
+CTFM is a simple, intuitive text format that turns markdown documents into living, breathing calculators. Define your variables, write your formulas, and CalculateIt handles the rest—parsing, dependency resolution, real-time updates, and UI rendering.
+
+```markdown
+## Inputs
+price = 100
+quantity = 5
+
+## Calculation
+total = price * quantity
+tax = total * 0.08
+grandTotal = total + tax
+```
+
+That's it. No JSX. No state management. No forms. Just **text that calculates**.
+
+## ✨ Why CTFM Changes Everything
+
+- 📝 **Text-First Design**: Define calculators in plain markdown—human-readable, version-controllable, LLM-friendly
+- 🎯 **Zero Configuration**: No schemas, no builders, no drag-and-drop. Just write formulas like you'd write them on paper
+- 🔄 **Automatic Dependencies**: CTFM figures out calculation order automatically—no manual dependency graphs
+- 🎨 **Instant UI**: Get a beautiful, responsive interface without writing a single line of JSX
+- 🧠 **AI-Ready**: Generate calculators with LLMs or let users describe their needs in natural language
+- 📱 **Deploy Anywhere**: CTFM documents are portable—same calculator on web, mobile, or CLI
+
+## 🎬 Quick Start
+
+```bash
+pnpm install @calculateit/react @calculateit/parser-js
+```
+
+**Step 1:** Write your calculator in CTFM (it's just markdown with formulas!)
+
+```markdown
+# Mortgage Calculator
+
+## Loan Details
+
+principal = 300000
+rate = 4.5
+years = 30
+
+## Monthly Payment
+
+monthlyRate = rate / 1200
+numPayments = years * 12
+payment = principal * monthlyRate / (1 - (1 + monthlyRate)^(-numPayments))
+totalPaid = payment * numPayments
+totalInterest = totalPaid - principal
+```
+
+**Step 2:** Parse and render
+
+```tsx
+import { Calculator } from '@calculateit/react';
+import { parseFile } from '@calculateit/parser-js';
+import '@calculateit/react/calculator.css';
+
+const markdown = `...`; // Your markdown from above
+
+function App() {
+  const result = parseFile(markdown, 'mortgage.md');
+  return <Calculator document={result.data} decimalPlaces={2} />;
+}
+```
+
+**That's it.** You just built a mortgage calculator with automatic calculations, real-time updates, and a beautiful UI.
+
+## 📖 CTFM Syntax Guide
+
+CalculateIt Flavored Markdown is designed to feel natural. Here's everything you need to know:
+
+### Basic Structure
+```markdown
+# Calculator Title (optional)
+
+## Section Name
+variable = value or formula
+anotherVar = calculation using other variables
+
+## Another Section
+result = some math expression
+```
+
+### Features
+- **Sections**: Use markdown headers (`##` to `######`) to organize your calculator
+- **Variables**: Simple assignments like `tax = 0.08` or `total = price * quantity`
+- **Formulas**: Use standard math operators (`+`, `-`, `*`, `/`, `^` for power)
+- **Functions**: Support for common functions (`sqrt`, `abs`, `min`, `max`, `sin`, `cos`, etc.)
+- **Comments**: Regular markdown text and formatting are preserved for documentation
+- **Hidden Sections**: Add `:hidden:` to section headers for internal calculations
+
+### Example: Multi-Step Calculation
+```markdown
+# Investment Calculator
+
+## Initial Investment
+principal = 10000
+annualRate = 7.5
+years = 10
+
+## Growth Calculation :hidden:
+monthlyRate = annualRate / 12 / 100
+months = years * 12
+
+## Results
+futureValue = principal * (1 + monthlyRate)^months
+totalGain = futureValue - principal
+returnPercent = (totalGain / principal) * 100
+```
+
+CTFM automatically figures out the calculation order, detects circular dependencies, and only recalculates what's needed when values change.
+
+## 🎨 Beyond the Basics
+
+### 🎛️ Flexible Sections
+Organize calculations into logical groups. Each section can have its own heading level, making complex calculators easy to understand.
+
+### 💅 Customizable Styling
+Use our default theme or bring your own. Built with CSS variables for easy theming. CTFM focuses on logic—you control the look.
+
+### 🔍 Formula Visibility
+Toggle formula display on/off. Perfect for educational tools or when you want users to see the math behind the magic.
+
+### 📐 Precision Control
+Set decimal places globally or format each variable uniquely with custom formatters.
+
+### 🎭 Custom Result Formatting
+```tsx
+<Calculator
+  document={result.data}
+  formatResult={(value, varName) => {
+    if (varName.includes('Price')) return `$${value.toFixed(2)}`;
+    if (varName.includes('Percent')) return `${value.toFixed(1)}%`;
+    return value.toFixed(2);
+  }}
+/>
+```
+
+## 🏗️ Built for Scale
+
+**Monorepo Architecture**
+- `@calculateit/parser-js` - Core calculation engine
+- `@calculateit/react` - React components and hooks
+- More parsers coming soon (Python, Excel formulas, and more!)
+
+**Modern Tooling**
+- ⚡ Vite for lightning-fast builds
+- 📚 Storybook for component development
+- 🔄 Turbo for optimized monorepo workflows
+- 💪 TypeScript for bulletproof type safety
+
+## 🚀 Why Text-Based Calculators Matter
+
+**CTFM unlocks possibilities that traditional UI-first approaches can't touch:**
+
+### 🤖 AI-Generated Calculators
+Let users describe what they need in plain English. Use GPT/Claude to generate CTFM documents on the fly. Instant custom calculators without writing code.
+
+### 📝 Version Control & Collaboration
+CTFM documents are just text files. Use Git, review changes in PRs, collaborate with non-developers. Your calculator logic is as reviewable as your code.
+
+### 🔄 Platform Independence
+Write once, run anywhere. The same CTFM document works in React, Vue, Svelte, or even CLI tools. Your calculator logic is decoupled from the UI framework.
+
+### 📚 Documentation That Calculates
+Embed calculators directly in your docs. Technical specifications that users can interact with. Tutorials that compute real results.
+
+### 🎯 User-Editable Calculators
+Let power users customize calculations. Store CTFM in your database. Build calculator marketplaces. The possibilities are endless.
+
+## 🎯 Perfect For
+
+- 💰 **Financial Calculators**: Mortgages, loans, ROI, compound interest—CTFM makes complex finance formulas readable
+- 🏗️ **Engineering Tools**: Unit conversions, material calculators, load estimators—formulas engineers can actually review
+- 📊 **Business Applications**: Pricing tools, quote generators, configurators—let sales teams tweak the logic
+- 🎓 **Educational Apps**: Interactive math lessons, formula explorers—students can see and edit the formulas
+- 🏥 **Healthcare**: BMI calculators, dosage calculators, risk assessments—formulas that clinicians can verify
+- 🤖 **AI-Powered Tools**: Generate custom calculators on demand—CTFM is the perfect LLM output format
+
+## 🚀 Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start Storybook for component development
+pnpm storybook
+
+# Run in development mode
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Type checking
+pnpm typecheck
+```
+
+## 📦 Packages
+
+| Package | Description | Version |
+|---------|-------------|---------|
+| `@calculateit/react` | React components and hooks | 0.1.0 |
+| `@calculateit/parser-js` | JavaScript expression parser | 0.1.0 |
+
+## 🤝 Contributing
+
+We love contributions! Whether it's bug fixes, new features, or documentation improvements—all PRs are welcome.
+
+## 📄 License
+
+MIT © CalculateIt
+
+---
+
+<div align="center">
+
+**Stop building calculator UIs. Start writing CTFM.**
+
+[Documentation](#) • [CTFM Playground](#) • [Examples](#) • [GitHub](#)
+
+Built with ❤️ for developers who believe calculators should be as simple as markdown
+
+*Because if you can write markdown, you can build calculators.*
+
+</div>
