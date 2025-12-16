@@ -2,6 +2,7 @@ import { LitElement, html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import type { ParsedDocument, Section, Variable } from '@calculateit/parser-js';
+import { parseFile } from '@calculateit/parser-js';
 import { CalculatorState } from './state/calculator-state.js';
 import { formatters, type FormatterName } from './utils/formatters.js';
 import { toTitleCase, parseDocumentJson } from './utils/helpers.js';
@@ -44,6 +45,12 @@ export class CalculateElement extends LitElement {
    */
   @property({ type: String, attribute: 'document-json' })
   documentJson?: string;
+
+  /**
+   * Markdown content (automatically parsed)
+   */
+  @property({ type: String })
+  markdown?: string;
 
   /**
    * Initial input values
@@ -112,6 +119,7 @@ export class CalculateElement extends LitElement {
     if (
       changedProperties.has('document') ||
       changedProperties.has('documentJson') ||
+      changedProperties.has('markdown') ||
       changedProperties.has('initialValues')
     ) {
       this.initializeState();
@@ -133,12 +141,24 @@ export class CalculateElement extends LitElement {
   }
 
   private resolveDocument(): ParsedDocument | null {
+    // Priority: document > markdown > documentJson
     if (this.document) {
       return this.document;
     }
+
+    if (this.markdown) {
+      const result = parseFile(this.markdown);
+      if (result.success && result.data) {
+        return result.data;
+      }
+      console.error('Failed to parse markdown:', result.error);
+      return null;
+    }
+
     if (this.documentJson) {
       return parseDocumentJson(this.documentJson);
     }
+
     return null;
   }
 

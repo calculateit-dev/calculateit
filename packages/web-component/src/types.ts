@@ -16,6 +16,11 @@ export interface CalculateElementProps {
   documentJson?: string;
 
   /**
+   * Markdown content (automatically parsed)
+   */
+  markdown?: string;
+
+  /**
    * Initial input values
    */
   initialValues?: Record<string, number>;

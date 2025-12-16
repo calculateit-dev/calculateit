@@ -5,7 +5,9 @@ import type { ParsedDocument, Variable } from '@calculateit/parser-js';
  */
 export interface CalculatorProps {
   /** Parsed document from @calculateit/parser-js */
-  document: ParsedDocument;
+  document?: ParsedDocument;
+  /** Markdown content (automatically parsed) - alternative to document prop */
+  markdown?: string;
   /** Initial values for input variables */
   initialValues?: Record<string, number>;
   /** Callback when input values change */
