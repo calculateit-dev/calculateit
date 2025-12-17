@@ -31,11 +31,11 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@calculateit/parser-js": "workspace:*",
     "@radix-ui/react-label": "^2.1.8",
     "react-markdown": "^10.1.0"
   },
   "devDependencies": {
+    "@calculateit/parser-js": "workspace:*",
     "@swc/core": "^1.15.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

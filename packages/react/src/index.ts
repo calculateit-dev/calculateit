@@ -33,4 +33,4 @@ export type {
   EvalResult,
 } from '@calculateit/parser-js';
 
-export { ExpressionEvaluator, evaluateExpression } from '@calculateit/parser-js';
+export { ExpressionEvaluator, evaluateExpression, parseFile } from '@calculateit/parser-js';

@@ -49,7 +49,7 @@ That's it. No JSX. No state management. No forms. Just **text that calculates**.
 ## 🎬 Quick Start
 
 ```bash
-pnpm install @calculateit/react @calculateit/parser-js
+pnpm install @calculateit/react
 ```
 
 **Step 1:** Write your calculator in CTFM (it's just markdown with formulas!)
@@ -75,8 +75,7 @@ totalInterest = totalPaid - principal
 **Step 2:** Parse and render
 
 ```tsx
-import { Calculator } from '@calculateit/react';
-import { parseFile } from '@calculateit/parser-js';
+import { Calculator, parseFile } from '@calculateit/react';
 import '@calculateit/react/calculator.css';
 
 const markdown = `...`; // Your markdown from above
