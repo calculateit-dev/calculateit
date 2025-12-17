@@ -29,7 +29,10 @@ export default defineConfig({
           'react/jsx-runtime': 'react/jsx-runtime',
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'calculator.css';
+          // Rename any CSS file to calculator.css
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'calculator.css';
+          }
           return assetInfo.name!;
         },
       },
