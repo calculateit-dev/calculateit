@@ -99,9 +99,6 @@ importers:
 
   packages/react:
     dependencies:
-      '@calculateit/parser-js':
-        specifier: workspace:*
-        version: link:../parsers/js
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -109,6 +106,9 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.2.7)(react@19.2.3)
     devDependencies:
+      '@calculateit/parser-js':
+        specifier: workspace:*
+        version: link:../parsers/js
       '@swc/core':
         specifier: ^1.15.4
         version: 1.15.4
@@ -139,13 +139,13 @@ importers:
 
   packages/web-component:
     dependencies:
-      '@calculateit/parser-js':
-        specifier: workspace:*
-        version: link:../parsers/js
       lit:
         specifier: ^3.0.0
         version: 3.3.1
     devDependencies:
+      '@calculateit/parser-js':
+        specifier: workspace:*
+        version: link:../parsers/js
       '@swc/core':
         specifier: ^1.15.4
         version: 1.15.4
