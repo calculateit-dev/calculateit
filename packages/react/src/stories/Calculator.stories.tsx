@@ -155,6 +155,30 @@ export const WithCallbacks: Story = {
   },
 };
 
+export const ThreeColumnsVertical: Story = {
+  args: {
+    document: cryptoResult.data!,
+    maxColumnsVertical: 3,
+    decimalPlaces: 2,
+  },
+};
+
+export const SingleColumnVertical: Story = {
+  args: {
+    document: cryptoResult.data!,
+    maxColumnsVertical: 1,
+    decimalPlaces: 2,
+  },
+};
+
+export const FourColumnsVertical: Story = {
+  args: {
+    document: cryptoResult.data!,
+    maxColumnsVertical: 4,
+    decimalPlaces: 2,
+  },
+};
+
 // Calculator with hidden sections example
 const initialHiddenSectionContent = `# Price Calculator
 

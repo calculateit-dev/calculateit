@@ -1,27 +1,14 @@
-// Export styles
-import './styles.css';
-
-// Export main component
+// Main component
 export { Calculator } from './Calculator.js';
 
-// Export sub-components (for advanced usage)
-export { Section } from './Section.js';
-export { InputField } from './InputField.js';
-export { CalcField } from './CalcField.js';
-
-// Export hooks
-export { useCalculator } from './hooks/useCalculator.js';
-
-// Export types
+// Types
 export type {
   CalculatorProps,
-  CalculatorState,
-  SectionProps,
-  InputFieldProps,
-  CalcFieldProps,
+  CalculatorRef,
+  FormatterName,
 } from './types.js';
 
-// Re-export parser types and evaluator for convenience
+// Re-export parser types and utilities for convenience
 export type {
   ParsedDocument,
   Section as ParsedSection,

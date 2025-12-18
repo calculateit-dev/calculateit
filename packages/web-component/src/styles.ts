@@ -49,6 +49,7 @@ export const styles = css`
     /* Layout */
     --calculate-min-column-width: 200px;
     --calculate-max-columns: auto-fit;
+    --calculate-vertical-max-columns: 2;
 
     /* Effects */
     --calculate-input-opacity-unfocused: 0.8;
@@ -170,6 +171,18 @@ export const styles = css`
       minmax(var(--calculate-min-column-width), 1fr)
     );
     gap: var(--calculate-section-gap);
+  }
+
+  /* Vertical mode: configurable max columns */
+  .calculator--vertical .section-content {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    max-width: 100%;
+  }
+
+  @media (min-width: 576px) {
+    .calculator--vertical .section-content {
+      grid-template-columns: repeat(var(--calculate-vertical-max-columns), 1fr);
+    }
   }
 
   /* ===== Input Field ===== */

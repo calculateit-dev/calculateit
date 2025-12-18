@@ -1,81 +1,138 @@
-import { useCallback, useMemo } from 'react';
-import { Section } from './Section.js';
-import { useCalculator } from './hooks/useCalculator.js';
-import { parseFile } from '@calculateit/parser-js';
-import type { CalculatorProps } from './types.js';
+/// <reference path="./jsx.d.ts" />
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import type { CalculatorProps, CalculatorRef } from './types.js';
+import '@calculateit/web-component';
+import type { CalculateElement } from '@calculateit/web-component';
 
 /**
- * Main Calculator component
- * Orchestrates sections and manages calculator state
+ * React wrapper for the calculate-it web component
+ *
+ * Provides a React-friendly API while leveraging the web component's
+ * Shadow DOM for perfect style isolation.
+ *
+ * @example
+ * ```tsx
+ * import { Calculator } from '@calculateit/react';
+ *
+ * function App() {
+ *   return (
+ *     <Calculator
+ *       markdown={calculatorMarkdown}
+ *       onValuesChange={(values) => console.log(values)}
+ *     />
+ *   );
+ * }
+ * ```
  */
-export function Calculator({
-  document,
-  markdown,
-  initialValues,
-  onValuesChange,
-  onCalculationsChange,
-  formatResult,
-  decimalPlaces = 6,
-  className,
-  showFormula = false,
-  direction = 'vertical',
-}: CalculatorProps) {
-  // Resolve document from markdown if provided
-  const resolvedDocument = useMemo(() => {
-    if (document) return document;
-    if (markdown) {
-      const result = parseFile(markdown);
-      if (result.success && result.data) {
-        return result.data;
-      }
-      console.error('Failed to parse markdown:', result.error);
-      return null;
-    }
-    return null;
-  }, [document, markdown]);
-
-  const { state, handleInputChange } = useCalculator(
-    resolvedDocument!,
-    initialValues,
-    onValuesChange,
-    onCalculationsChange
-  );
-
-  if (!resolvedDocument) {
-    return <div className="error">No document or markdown provided</div>;
-  }
-
-  /**
-   * Default result formatter
-   */
-  const defaultFormatResult = useCallback(
-    (value: number, _variableName: string) => {
-      return value.toFixed(decimalPlaces);
+export const Calculator = forwardRef<CalculatorRef, CalculatorProps>(
+  (
+    {
+      document,
+      documentJson,
+      markdown,
+      initialValues,
+      onValuesChange,
+      onCalculationsChange,
+      formatResult,
+      decimalPlaces = 6,
+      showFormula = false,
+      direction = 'vertical',
+      formatter = 'default',
+      maxColumnsVertical = 2,
+      className,
+      style,
     },
-    [decimalPlaces]
-  );
+    ref
+  ) => {
+    const elementRef = useRef<CalculateElement>(null);
 
-  const resultFormatter = formatResult || defaultFormatResult;
-  const calculatorClass = `calculator calculator--${direction}`;
+    // Expose imperative methods via ref
+    useImperativeHandle(ref, () => ({
+      getValues: () => elementRef.current?.getValues() || {},
+      getCalculations: () => elementRef.current?.getCalculations() || {},
+      setValues: (values: Record<string, number>) => {
+        elementRef.current?.setValues(values);
+      },
+      recalculate: () => {
+        elementRef.current?.recalculate();
+      },
+    }));
 
-  return (
-    <div className={className || calculatorClass}>
-      {resolvedDocument.sections
-        .filter((section) => !section.hidden)
-        .map((section) => (
-          <Section
-            key={section.name}
-            name={section.name}
-            variables={section.variables}
-            inputValues={state.inputValues}
-            calculatedValues={state.calculatedValues}
-            onInputChange={handleInputChange}
-            formatResult={resultFormatter}
-            decimalPlaces={decimalPlaces}
-            showFormula={showFormula}
-            level={section.level}
-          />
-        ))}
-    </div>
-  );
-}
+    // Sync props to web component properties
+    useEffect(() => {
+      const element = elementRef.current;
+      if (!element) return;
+
+      if (document !== undefined) element.document = document;
+      if (documentJson !== undefined) element.documentJson = documentJson;
+      if (markdown !== undefined) element.markdown = markdown;
+      if (initialValues !== undefined) element.initialValues = initialValues;
+      if (formatResult !== undefined) element.formatResult = formatResult;
+
+      element.decimalPlaces = decimalPlaces;
+      element.showFormula = showFormula;
+      element.direction = direction;
+      element.formatter = formatter;
+      element.maxColumnsVertical = maxColumnsVertical;
+    }, [
+      document,
+      documentJson,
+      markdown,
+      initialValues,
+      formatResult,
+      decimalPlaces,
+      showFormula,
+      direction,
+      formatter,
+      maxColumnsVertical,
+    ]);
+
+    // Set up event listeners for callbacks
+    useEffect(() => {
+      const element = elementRef.current;
+      if (!element) return;
+
+      const handleValuesChange = (event: Event) => {
+        const customEvent = event as CustomEvent<{
+          values: Record<string, number>;
+          timestamp: number;
+        }>;
+        onValuesChange?.(customEvent.detail.values);
+      };
+
+      const handleCalculationsChange = (event: Event) => {
+        const customEvent = event as CustomEvent<{
+          calculations: Record<string, number>;
+          timestamp: number;
+        }>;
+        onCalculationsChange?.(customEvent.detail.calculations);
+      };
+
+      if (onValuesChange) {
+        element.addEventListener('values-change', handleValuesChange);
+      }
+      if (onCalculationsChange) {
+        element.addEventListener('calculations-change', handleCalculationsChange);
+      }
+
+      return () => {
+        if (onValuesChange) {
+          element.removeEventListener('values-change', handleValuesChange);
+        }
+        if (onCalculationsChange) {
+          element.removeEventListener('calculations-change', handleCalculationsChange);
+        }
+      };
+    }, [onValuesChange, onCalculationsChange]);
+
+    return (
+      <calculate-it
+        ref={elementRef}
+        class={className}
+        style={style}
+      />
+    );
+  }
+);
+
+Calculator.displayName = 'Calculator';

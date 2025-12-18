@@ -10,8 +10,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./calculator.css": "./dist/calculator.css"
+    }
   },
   "files": [
     "dist"
@@ -31,8 +30,7 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@radix-ui/react-label": "^2.1.8",
-    "react-markdown": "^10.1.0"
+    "@calculateit/web-component": "workspace:*"
   },
   "devDependencies": {
     "@calculateit/parser-js": "workspace:*",

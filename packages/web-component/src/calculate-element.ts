@@ -82,6 +82,12 @@ export class CalculateElement extends LitElement {
   @property({ type: String })
   formatter: FormatterName = 'default';
 
+  /**
+   * Maximum number of columns in vertical mode (default: 2)
+   */
+  @property({ type: Number, attribute: 'max-columns-vertical' })
+  maxColumnsVertical: number = 2;
+
   // ===== Callback Properties (JavaScript only) =====
 
   /**
@@ -245,7 +251,10 @@ export class CalculateElement extends LitElement {
     };
 
     return html`
-      <div class=${classMap(calculatorClasses)}>
+      <div
+        class=${classMap(calculatorClasses)}
+        style="--calculate-vertical-max-columns: ${this.maxColumnsVertical}"
+      >
         ${doc.sections
           .filter((section) => !section.hidden)
           .map((section) => this.renderSection(section))}
