@@ -44,8 +44,20 @@
 /* Section Layout */
 .section-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 0.75rem;
+}
+
+/* Vertical mode: max 2 columns */
+.calculator--vertical .section-content {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  max-width: 100%;
+}
+
+@media (min-width: 576px) {
+  .calculator--vertical .section-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Input Field Layout */
