@@ -30,7 +30,8 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@calculateit/web-component": "workspace:*"
+    "@calculateit/web-component": "workspace:*",
+    "@lit/react": "^1.0.8"
   },
   "devDependencies": {
     "@calculateit/parser-js": "workspace:*",

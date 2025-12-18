@@ -1,7 +1,13 @@
-import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import { createComponent } from '@lit/react';
 import type { CalculatorProps, CalculatorRef } from './types.js';
-import '@calculateit/web-component';
-import type { CalculateElement } from '@calculateit/web-component';
+import { CalculateElement } from '@calculateit/web-component';
+
+const CalculateItComponent = createComponent({
+  tagName: 'calculate-it',
+  elementClass: CalculateElement,
+  react: React,
+});
 
 /**
  * React wrapper for the calculate-it web component
@@ -17,7 +23,10 @@ import type { CalculateElement } from '@calculateit/web-component';
  *   return (
  *     <Calculator
  *       markdown={calculatorMarkdown}
- *       onValuesChange={(values) => console.log(values)}
+ *       onValuesChange={(e) => {
+ *         const event = e as CustomEvent<{ values: Record<string, number> }>;
+ *         console.log(event.detail.values);
+ *       }}
  *     />
  *   );
  * }
@@ -33,11 +42,11 @@ export const Calculator = forwardRef<CalculatorRef, CalculatorProps>(
       onValuesChange,
       onCalculationsChange,
       formatResult,
-      decimalPlaces = 6,
-      showFormula = false,
-      direction = 'vertical',
-      formatter = 'default',
-      maxColumnsVertical = 2,
+      decimalPlaces,
+      showFormula,
+      direction,
+      formatter,
+      maxColumnsVertical,
       className,
       style,
     },
@@ -57,77 +66,42 @@ export const Calculator = forwardRef<CalculatorRef, CalculatorProps>(
       },
     }));
 
-    // Sync props to web component properties
+    // Set up event listeners
     useEffect(() => {
       const element = elementRef.current;
       if (!element) return;
-
-      if (document !== undefined) element.document = document;
-      if (documentJson !== undefined) element.documentJson = documentJson;
-      if (markdown !== undefined) element.markdown = markdown;
-      if (initialValues !== undefined) element.initialValues = initialValues;
-      if (formatResult !== undefined) element.formatResult = formatResult;
-
-      element.decimalPlaces = decimalPlaces;
-      element.showFormula = showFormula;
-      element.direction = direction;
-      element.formatter = formatter;
-      element.maxColumnsVertical = maxColumnsVertical;
-    }, [
-      document,
-      documentJson,
-      markdown,
-      initialValues,
-      formatResult,
-      decimalPlaces,
-      showFormula,
-      direction,
-      formatter,
-      maxColumnsVertical,
-    ]);
-
-    // Set up event listeners for callbacks
-    useEffect(() => {
-      const element = elementRef.current;
-      if (!element) return;
-
-      const handleValuesChange = (event: Event) => {
-        const customEvent = event as CustomEvent<{
-          values: Record<string, number>;
-          timestamp: number;
-        }>;
-        onValuesChange?.(customEvent.detail.values);
-      };
-
-      const handleCalculationsChange = (event: Event) => {
-        const customEvent = event as CustomEvent<{
-          calculations: Record<string, number>;
-          timestamp: number;
-        }>;
-        onCalculationsChange?.(customEvent.detail.calculations);
-      };
 
       if (onValuesChange) {
-        element.addEventListener('values-change', handleValuesChange);
+        element.addEventListener('values-change', onValuesChange);
       }
       if (onCalculationsChange) {
-        element.addEventListener('calculations-change', handleCalculationsChange);
+        element.addEventListener('calculations-change', onCalculationsChange);
       }
 
       return () => {
         if (onValuesChange) {
-          element.removeEventListener('values-change', handleValuesChange);
+          element.removeEventListener('values-change', onValuesChange);
         }
         if (onCalculationsChange) {
-          element.removeEventListener('calculations-change', handleCalculationsChange);
+          element.removeEventListener('calculations-change', onCalculationsChange);
         }
       };
     }, [onValuesChange, onCalculationsChange]);
 
     return (
-      <calculate-it
+      <CalculateItComponent
         ref={elementRef}
-        class={className}
+        document={document}
+        documentJson={documentJson}
+        markdown={markdown}
+        initialValues={initialValues}
+        formatResult={formatResult}
+        decimalPlaces={decimalPlaces}
+        showFormula={showFormula}
+        direction={direction}
+        formatter={formatter}
+        maxColumnsVertical={maxColumnsVertical}
+        className={className}
         style={style}
       />
     );

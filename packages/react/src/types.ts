@@ -33,12 +33,12 @@ export interface CalculatorProps {
   /**
    * Callback when input values change
    */
-  onValuesChange?: (values: Record<string, number>) => void;
+  onValuesChange?: (e: Event) => void;
 
   /**
    * Callback when calculations update
    */
-  onCalculationsChange?: (calculations: Record<string, number>) => void;
+  onCalculationsChange?: (e: Event) => void;
 
   /**
    * Custom formatting function for results
