@@ -1,4 +1,3 @@
-/// <reference path="./jsx.d.ts" />
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import type { CalculatorProps, CalculatorRef } from './types.js';
 import '@calculateit/web-component';
