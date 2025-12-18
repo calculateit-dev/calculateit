@@ -163,6 +163,11 @@ export const styles = css`
     margin-bottom: 1rem;
   }
 
+  /* Section Description (Markdown Content) */
+  .section-description {
+    margin-bottom: 1rem;
+  }
+
   /* Section Layout */
   .section-content {
     display: grid;

@@ -1,7 +1,8 @@
 import { LitElement, html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import type { ParsedDocument, Section, Variable } from '@calculateit/parser-js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import type { ParsedDocument, Section, SectionItem, Variable } from '@calculateit/parser-js';
 import { parseFile } from '@calculateit/parser-js';
 import { CalculatorState } from './state/calculator-state.js';
 import { formatters, type FormatterName } from './utils/formatters.js';
@@ -268,11 +269,52 @@ export class CalculateElement extends LitElement {
     return html`
       <section class="section">
         ${this.renderHeading(section.name, headingLevel)}
-        <div class="section-content">
-          ${section.variables.map((variable) => this.renderVariable(variable))}
-        </div>
+        ${section.items && section.items.length > 0
+          ? this.renderSectionItems(section.items)
+          : html`
+              <div class="section-content">
+                ${section.variables.map((variable) => this.renderVariable(variable))}
+              </div>
+            `}
       </section>
     `;
+  }
+
+  private renderSectionItems(items: SectionItem[]) {
+    const result: any[] = [];
+    let variableGroup: any[] = [];
+
+    for (const item of items) {
+      if (item.type === 'content') {
+        // Flush any accumulated variables first
+        if (variableGroup.length > 0) {
+          result.push(html`
+            <div class="section-content">
+              ${variableGroup.map((v) => this.renderVariable(v))}
+            </div>
+          `);
+          variableGroup = [];
+        }
+        // Add content block
+        result.push(html`
+          <div class="section-description">${unsafeHTML(item.html)}</div>
+        `);
+      } else if (item.type === 'variable') {
+        // Accumulate variables to render in grid
+        variableGroup.push(item.variable);
+      }
+    }
+
+    // Flush any remaining variables
+    if (variableGroup.length > 0) {
+      result.push(html`
+        <div class="section-content">
+          ${variableGroup.map((v) => this.renderVariable(v))}
+        </div>
+      `);
+    }
+
+    return result;
   }
 
   private renderHeading(name: string, level: number) {

@@ -356,4 +356,58 @@ or variables`;
       expect(result.data?.sections).toHaveLength(0);
     });
   });
+
+  describe('Org Content Extraction', () => {
+    it('should extract content at the end of org sections', () => {
+      const content = `** Section
+
+x = 10
+y = 20
+
+This is content at the end.
+With multiple lines.`;
+
+      const result = parseFile(content, 'test.org');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+      expect(section?.items?.length).toBe(3);
+
+      const lastItem = section?.items?.[2];
+      expect(lastItem?.type).toBe('content');
+      if (lastItem?.type === 'content') {
+        expect(lastItem.html).toContain('content at the end');
+      }
+    });
+
+    it('should handle org content with formatting', () => {
+      const content = `** Introduction
+
+Some text with content.
+
+x = 10`;
+
+      const result = parseFile(content, 'test.org');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+      const contentItem = section?.items?.[0];
+      expect(contentItem?.type).toBe('content');
+    });
+
+    it('should skip empty content in org mode', () => {
+      const content = `** Section
+
+
+
+x = 10`;
+
+      const result = parseFile(content, 'test.org');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+      expect(section?.items?.length).toBe(1);
+      expect(section?.items?.[0]?.type).toBe('variable');
+    });
+  });
 });

@@ -15,6 +15,13 @@ export interface ParsedDocument {
 }
 
 /**
+ * Section item - either a variable or markdown content
+ */
+export type SectionItem =
+  | { type: 'variable'; variable: Variable }
+  | { type: 'content'; html: string };
+
+/**
  * A section in the document (corresponds to headers in org/markdown)
  */
 export interface Section {
@@ -28,6 +35,8 @@ export interface Section {
   hidden?: boolean;
   /** Heading level (1-6 for markdown #-######, 1+ for org-mode *-****...) */
   level?: number;
+  /** Ordered items (variables and content blocks) as they appear in source */
+  items?: SectionItem[];
 }
 
 /**

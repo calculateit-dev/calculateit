@@ -3,13 +3,13 @@ import { parseFile, parseMarkdownFile } from './parser';
 
 describe('Markdown Parser', () => {
   describe('Basic Parsing', () => {
-    it('should parse markdown with single section', () => {
+    it('should parse markdown with single section', async () => {
       const content = `## Input Values
 
 x = 10
 y = 5`;
 
-      const result = parseFile(content, 'test.md');
+      const result = await parseFile(content, 'test.md');
 
       expect(result.success).toBe(true);
       expect(result.data?.format).toBe('markdown');
@@ -364,6 +364,130 @@ or variables`;
 
       expect(result.success).toBe(true);
       expect(result.data?.sections).toHaveLength(0);
+    });
+  });
+
+  describe('Markdown Content Extraction', () => {
+    it('should extract markdown content between variables', () => {
+      const content = `## Input Values
+
+Some description text here.
+
+basePrice = 100
+taxRate = 0.08
+
+**Note:** More content here.
+
+## Results
+
+result = basePrice * taxRate`;
+
+      const result = parseFile(content, 'test.md');
+
+      expect(result.success).toBe(true);
+      expect(result.data?.sections).toHaveLength(2);
+
+      // Check first section has content items
+      const firstSection = result.data?.sections[0];
+      expect(firstSection?.items).toBeDefined();
+      expect(firstSection?.items?.length).toBeGreaterThan(0);
+
+      // Should have content before variables
+      const firstItem = firstSection?.items?.[0];
+      expect(firstItem?.type).toBe('content');
+      if (firstItem?.type === 'content') {
+        expect(firstItem.html).toContain('description');
+      }
+    });
+
+    it('should extract content with bold and formatting', () => {
+      const content = `## Section
+
+**Bold text** and *italic text*.
+
+x = 10`;
+
+      const result = parseFile(content, 'test.md');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+      expect(section?.items).toBeDefined();
+
+      const contentItem = section?.items?.[0];
+      expect(contentItem?.type).toBe('content');
+      if (contentItem?.type === 'content') {
+        expect(contentItem.html).toContain('<strong>Bold text</strong>');
+        expect(contentItem.html).toContain('<em>italic text</em>');
+      }
+    });
+
+    it('should extract content at the end of a section', () => {
+      const content = `## Section
+
+x = 10
+y = 20
+
+This is content at the end of the section.
+More text here.`;
+
+      const result = parseFile(content, 'test.md');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+      expect(section?.items).toBeDefined();
+      expect(section?.items?.length).toBe(3);
+
+      // Last item should be content
+      const lastItem = section?.items?.[2];
+      expect(lastItem?.type).toBe('content');
+      if (lastItem?.type === 'content') {
+        expect(lastItem.html).toContain('content at the end');
+        expect(lastItem.html).toContain('More text here');
+      }
+    });
+
+    it('should handle content only sections (no variables)', () => {
+      const content = `## Introduction
+
+This is an introduction paragraph.
+
+**Key points:**
+- Point 1
+- Point 2
+
+## Calculations
+
+x = 10`;
+
+      const result = parseFile(content, 'test.md');
+
+      expect(result.success).toBe(true);
+      expect(result.data?.sections).toHaveLength(2);
+
+      const introSection = result.data?.sections[0];
+      expect(introSection?.variables).toHaveLength(0);
+      expect(introSection?.items?.length).toBeGreaterThan(0);
+
+      const contentItem = introSection?.items?.[0];
+      expect(contentItem?.type).toBe('content');
+    });
+
+    it('should skip empty/whitespace-only content', () => {
+      const content = `## Section
+
+
+
+
+x = 10`;
+
+      const result = parseFile(content, 'test.md');
+
+      expect(result.success).toBe(true);
+      const section = result.data?.sections[0];
+
+      // Should only have the variable, not empty content
+      expect(section?.items?.length).toBe(1);
+      expect(section?.items?.[0]?.type).toBe('variable');
     });
   });
 });

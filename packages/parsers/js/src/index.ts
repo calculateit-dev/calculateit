@@ -2,6 +2,7 @@
 export type {
   ParsedDocument,
   Section,
+  SectionItem,
   Variable,
   ParserOptions,
   ParseResult,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Calculator } from '../Calculator';
 import { parseFile } from '@calculateit/parser-js';
@@ -83,8 +83,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Parse the documents
-const cryptoResult = parseFile(cryptoCalcContent, 'crypto.md');
-const mathResult = parseFile(simpleMathContent, 'math.md');
+const cryptoResult = parseFile(cryptoCalcContent);
+const mathResult = parseFile(simpleMathContent);
 
 export const CryptoSwingTrading: Story = {
   args: {
@@ -211,7 +211,7 @@ effectiveTaxRate = taxAmount / basePrice
 export const WithHiddenSections: Story = {
   render: () => {
     const [markdown, setMarkdown] = useState(initialHiddenSectionContent);
-    const parseResult = parseFile(markdown, 'hidden.md');
+    const parseResult = parseFile(markdown);
 
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', padding: '2rem', minHeight: '100vh' }}>

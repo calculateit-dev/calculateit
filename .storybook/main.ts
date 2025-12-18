@@ -31,6 +31,10 @@ const config: StorybookConfig = {
           'react-dom': resolve(__dirname, '../node_modules/react-dom'),
         },
       },
+      define: {
+        ...config.define,
+        'process.env': {},
+      },
     };
   },
 };

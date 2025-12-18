@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 import type { ParsedDocument, ParseResult, ParserOptions, Section, Variable } from './types.js';
 import {
   detectFormat,
@@ -11,8 +12,37 @@ import {
 
 /**
  * Parse an org-mode or markdown file with literate calculations
+ * Uses a two-pass approach:
+ * 1. Parse structure (sections, variables, raw text content)
+ * 2. Convert markdown content to HTML
  */
 export function parseFile(content: string, filename?: string, options: ParserOptions = {}): ParseResult {
+  try {
+    // PASS 1: Parse document structure
+    const document = parseStructure(content, filename, options);
+
+    // PASS 2: Convert markdown content to HTML
+    convertMarkdownContent(document);
+
+    return {
+      success: true,
+      data: document,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: error instanceof Error ? error.message : 'Unknown parsing error',
+        context: 'Failed to parse file content',
+      },
+    };
+  }
+}
+
+/**
+ * PASS 1: Parse document structure - extracts sections, variables, and raw text content
+ */
+function parseStructure(content: string, filename?: string, options: ParserOptions = {}): ParsedDocument {
   try {
     const {
       autoDetectInputs = true,
@@ -36,6 +66,9 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
     // Track variable order within sections
     const sectionVariableCounts = new Map<string, number>();
 
+    // Track raw content lines (non-formula text) for each section
+    const sectionContentLines = new Map<string, string[]>();
+
     // Parse each line
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
@@ -45,6 +78,17 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
 
       // Check for section headers
       if (isSectionHeader(line, format)) {
+        // Flush content buffer from previous section before switching
+        const prevSection = sectionsMap.get(currentSection);
+        const prevContentLines = sectionContentLines.get(currentSection);
+        if (prevSection && prevContentLines && prevContentLines.length > 0) {
+          const contentText = prevContentLines.join('\n');
+          if (contentText.trim()) {
+            prevSection.items!.push({ type: 'content', html: contentText });
+          }
+          prevContentLines.length = 0;
+        }
+
         const sectionName = extractSectionName(line, format);
         const hidden = isHiddenSection(line);
         const level = extractHeadingLevel(line, format);
@@ -58,7 +102,9 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
             variables: [],
             hidden,
             level,
+            items: [], // Initialize items array for interleaved content and variables
           });
+          sectionContentLines.set(sectionName, []);
         }
         continue;
       }
@@ -79,6 +125,18 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
       // Try to parse variable assignment
       const assignment = parseVariableAssignment(line);
       if (assignment) {
+        // Flush content buffer before adding variable
+        const section = sectionsMap.get(currentSection);
+        const contentLines = sectionContentLines.get(currentSection);
+        if (section && contentLines && contentLines.length > 0) {
+          const contentText = contentLines.join('\n');
+          // Only add if not empty/whitespace
+          if (contentText.trim()) {
+            section.items!.push({ type: 'content', html: contentText });
+          }
+          contentLines.length = 0; // Clear buffer
+        }
+
         const { name, expression } = assignment;
 
         // Determine variable order within section
@@ -110,10 +168,29 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
           inputVariables.push(name);
         }
 
-        // Add to section's variables
-        const section = sectionsMap.get(currentSection);
+        // Add to section's variables and items
         if (section) {
           section.variables.push(variable);
+          section.items!.push({ type: 'variable', variable });
+        }
+      } else {
+        // Line is not a formula - add to content buffer
+        const contentLines = sectionContentLines.get(currentSection);
+        if (contentLines) {
+          contentLines.push(line);
+        }
+      }
+    }
+
+    // Flush any remaining content at the end of each section
+    for (const [sectionName, contentLines] of sectionContentLines.entries()) {
+      if (contentLines.length > 0) {
+        const section = sectionsMap.get(sectionName);
+        if (section) {
+          const contentText = contentLines.join('\n');
+          if (contentText.trim()) {
+            section.items!.push({ type: 'content', html: contentText });
+          }
         }
       }
     }
@@ -130,18 +207,25 @@ export function parseFile(content: string, filename?: string, options: ParserOpt
       inputVariables,
     };
 
-    return {
-      success: true,
-      data: document,
-    };
+    return document;
   } catch (error) {
-    return {
-      success: false,
-      error: {
-        message: error instanceof Error ? error.message : 'Unknown parsing error',
-        context: 'Failed to parse file content',
-      },
-    };
+    throw error; // Let parseFile handle the error
+  }
+}
+
+/**
+ * PASS 2: Convert markdown content to HTML
+ */
+function convertMarkdownContent(document: ParsedDocument): void {
+  for (const section of document.sections) {
+    if (section.items) {
+      for (const item of section.items) {
+        if (item.type === 'content') {
+          // Convert raw markdown text to HTML
+          item.html = marked.parse(item.html) as string;
+        }
+      }
+    }
   }
 }
 

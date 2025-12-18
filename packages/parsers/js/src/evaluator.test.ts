@@ -133,4 +133,17 @@ describe('evaluateExpression', () => {
     const result = evaluateExpression('x + y', {});
     expect(result.success).toBe(false);
   });
+
+  it('should handle non-Error exceptions gracefully', () => {
+    // Create a context with a getter that throws a non-Error
+    const problematicContext = {
+      get x() {
+        throw 'String error';
+      }
+    };
+
+    const result = evaluateExpression('x + 1', problematicContext);
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Evaluation error');
+  });
 });
