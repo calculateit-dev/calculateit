@@ -18,16 +18,18 @@ import { styles } from './styles.js';
  * @fires values-change - Fired when input values change
  * @fires calculations-change - Fired when calculations update
  *
- * @cssprop --calculate-bg-color - Background color
- * @cssprop --calculate-text-color - Text color
- * @cssprop --calculate-input-bg - Input background color
- * @cssprop --calculate-result-bg - Result background color
- * @cssprop --calculate-result-color - Result text color
- * @cssprop --calculate-negative-bg - Negative value background
- * @cssprop --calculate-negative-color - Negative value text color
- * @cssprop --calculate-gap - Gap between sections
- * @cssprop --calculate-border-radius - Border radius
- * ... and 20+ more CSS custom properties
+ * @cssprop --calculate-it-bg-color - Background color
+ * @cssprop --calculate-it-text-color - Text color
+ * @cssprop --calculate-it-input-bg - Input background color
+ * @cssprop --calculate-it-input-label-color - Input label color (unfocused)
+ * @cssprop --calculate-it-input-label-focus-color - Input label color (focused)
+ * @cssprop --calculate-it-result-bg - Result background color
+ * @cssprop --calculate-it-result-color - Result text color
+ * @cssprop --calculate-it-negative-bg - Negative value background
+ * @cssprop --calculate-it-negative-color - Negative value text color
+ * @cssprop --calculate-it-gap - Gap between sections
+ * @cssprop --calculate-it-border-radius - Border radius
+ * ... and 20+ more CSS custom properties (see README for full list)
  */
 @customElement('calculate-it')
 export class CalculateElement extends LitElement {
@@ -254,7 +256,7 @@ export class CalculateElement extends LitElement {
     return html`
       <div
         class=${classMap(calculatorClasses)}
-        style="--calculate-vertical-max-columns: ${this.maxColumnsVertical}"
+        style="--calculate-it-vertical-max-columns: ${this.maxColumnsVertical}"
       >
         ${doc.sections
           .filter((section) => !section.hidden)

@@ -8,58 +8,60 @@ export const styles = css`
   /* ===== CSS Custom Properties API ===== */
   :host {
     /* Colors */
-    --calculate-bg-color: #fff;
-    --calculate-text-color: #000;
+    --calculate-it-bg-color: #fff;
+    --calculate-it-text-color: #000;
 
     /* Input fields */
-    --calculate-input-bg: #f8f9fa;
-    --calculate-input-border: #dee2e6;
-    --calculate-input-text: #000;
-    --calculate-input-focus-border: #0066cc;
+    --calculate-it-input-bg: #f8f9fa;
+    --calculate-it-input-border: #dee2e6;
+    --calculate-it-input-text: #000;
+    --calculate-it-input-focus-border: #0066cc;
+    --calculate-it-input-label-color: rgba(0, 0, 0, 0.5);
+    --calculate-it-input-label-focus-color: rgba(0, 0, 0, 0.7);
 
     /* Calculated results */
-    --calculate-result-bg: #e8f5e9;
-    --calculate-result-color: #2e7d32;
-    --calculate-result-font-size: 1.25rem;
+    --calculate-it-result-bg: #e8f5e9;
+    --calculate-it-result-color: #2e7d32;
+    --calculate-it-result-font-size: 1.25rem;
 
     /* Negative values */
-    --calculate-negative-bg: #fee2e2;
-    --calculate-negative-color: #991b1b;
+    --calculate-it-negative-bg: #fee2e2;
+    --calculate-it-negative-color: #991b1b;
 
     /* Section headings */
-    --calculate-heading-color: inherit;
-    --calculate-heading-font-weight: 600;
+    --calculate-it-heading-color: inherit;
+    --calculate-it-heading-font-weight: 600;
 
     /* Spacing */
-    --calculate-gap: 2rem;
-    --calculate-section-gap: 0.75rem;
-    --calculate-padding: 0.75rem;
-    --calculate-input-padding: 0.5rem;
+    --calculate-it-gap: 2rem;
+    --calculate-it-section-gap: 0.75rem;
+    --calculate-it-padding: 0.75rem;
+    --calculate-it-input-padding: 0.5rem;
 
     /* Typography */
-    --calculate-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --calculate-font-mono: 'Monaco', 'Courier New', monospace;
-    --calculate-title-font-size: 0.75rem;
-    --calculate-formula-font-size: 0.75rem;
+    --calculate-it-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --calculate-it-font-mono: 'Monaco', 'Courier New', monospace;
+    --calculate-it-title-font-size: 0.75rem;
+    --calculate-it-formula-font-size: 0.75rem;
 
     /* Borders */
-    --calculate-border-radius: 0.375rem;
-    --calculate-border-width: 1px;
+    --calculate-it-border-radius: 0.375rem;
+    --calculate-it-border-width: 1px;
 
     /* Layout */
-    --calculate-min-column-width: 200px;
-    --calculate-max-columns: auto-fit;
-    --calculate-vertical-max-columns: 2;
+    --calculate-it-min-column-width: 200px;
+    --calculate-it-max-columns: auto-fit;
+    --calculate-it-vertical-max-columns: 2;
 
     /* Effects */
-    --calculate-input-opacity-unfocused: 0.8;
-    --calculate-title-opacity: 0.7;
-    --calculate-formula-opacity: 0.6;
+    --calculate-it-input-opacity-unfocused: 0.8;
+    --calculate-it-title-opacity: 0.7;
+    --calculate-it-formula-opacity: 0.6;
 
     /* Display */
     display: block;
-    font-family: var(--calculate-font-family);
-    color: var(--calculate-text-color);
+    font-family: var(--calculate-it-font-family);
+    color: var(--calculate-it-text-color);
   }
 
   /* ===== Minimal Pico CSS Reset ===== */
@@ -73,19 +75,19 @@ export const styles = css`
   input[type='number'] {
     display: block;
     width: 100%;
-    padding: var(--calculate-input-padding);
+    padding: var(--calculate-it-input-padding);
     font-size: 1rem;
-    font-family: var(--calculate-font-family);
-    color: var(--calculate-input-text);
-    background-color: var(--calculate-input-bg);
-    border: var(--calculate-border-width) solid var(--calculate-input-border);
-    border-radius: var(--calculate-border-radius);
+    font-family: var(--calculate-it-font-family);
+    color: var(--calculate-it-input-text);
+    background-color: var(--calculate-it-input-bg);
+    border: var(--calculate-it-border-width) solid var(--calculate-it-input-border);
+    border-radius: var(--calculate-it-border-radius);
     outline: none;
     transition: border-color 0.2s ease;
   }
 
   input[type='number']:focus {
-    border-color: var(--calculate-input-focus-border);
+    border-color: var(--calculate-it-input-focus-border);
   }
 
   /* Headings */
@@ -96,8 +98,8 @@ export const styles = css`
   h5,
   h6 {
     margin: 0 0 1rem 0;
-    font-weight: var(--calculate-heading-font-weight);
-    color: var(--calculate-heading-color);
+    font-weight: var(--calculate-it-heading-font-weight);
+    color: var(--calculate-it-heading-color);
   }
 
   h1 {
@@ -123,7 +125,7 @@ export const styles = css`
   .calculator {
     display: flex;
     flex-direction: column;
-    gap: var(--calculate-gap);
+    gap: var(--calculate-it-gap);
   }
 
   /* Vertical Layout (Default) */
@@ -172,10 +174,10 @@ export const styles = css`
   .section-content {
     display: grid;
     grid-template-columns: repeat(
-      var(--calculate-max-columns),
-      minmax(var(--calculate-min-column-width), 1fr)
+      var(--calculate-it-max-columns),
+      minmax(var(--calculate-it-min-column-width), 1fr)
     );
-    gap: var(--calculate-section-gap);
+    gap: var(--calculate-it-section-gap);
   }
 
   /* Vertical mode: configurable max columns */
@@ -186,7 +188,7 @@ export const styles = css`
 
   @media (min-width: 576px) {
     .calculator--vertical .section-content {
-      grid-template-columns: repeat(var(--calculate-vertical-max-columns), 1fr);
+      grid-template-columns: repeat(var(--calculate-it-vertical-max-columns), 1fr);
     }
   }
 
@@ -208,19 +210,19 @@ export const styles = css`
   }
 
   .input-field input.negative {
-    background-color: var(--calculate-negative-bg);
-    color: var(--calculate-negative-color);
+    background-color: var(--calculate-it-negative-bg);
+    color: var(--calculate-it-negative-color);
   }
 
   .input-label {
     position: absolute;
-    left: var(--calculate-input-padding);
+    left: var(--calculate-it-input-padding);
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
     transition: all 0.2s ease;
     font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--calculate-it-input-label-color);
     background: transparent;
   }
 
@@ -229,23 +231,23 @@ export const styles = css`
     top: -0.625rem;
     font-size: 0.75rem;
     transform: translateY(0);
-    background: var(--calculate-bg-color);
+    background: var(--calculate-it-bg-color);
     padding: 0 0.25rem;
-    color: rgba(0, 0, 0, 0.7);
-    left: calc(var(--calculate-input-padding) - 0.25rem);
+    color: var(--calculate-it-input-label-focus-color);
+    left: calc(var(--calculate-it-input-padding) - 0.25rem);
   }
 
   /* Input Result Display */
   .input-result {
-    padding: var(--calculate-input-padding);
-    border-radius: var(--calculate-border-radius);
+    padding: var(--calculate-it-input-padding);
+    border-radius: var(--calculate-it-border-radius);
     font-weight: 600;
     font-size: 0.875rem;
-    font-family: var(--calculate-font-mono);
+    font-family: var(--calculate-it-font-mono);
     text-align: right;
     white-space: nowrap;
     min-width: 4rem;
-    opacity: var(--calculate-input-opacity-unfocused);
+    opacity: var(--calculate-it-input-opacity-unfocused);
   }
 
   /* ===== Calculated Field ===== */
@@ -253,39 +255,39 @@ export const styles = css`
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    padding: var(--calculate-padding);
-    background: var(--calculate-bg-color);
-    border-radius: var(--calculate-border-radius);
+    padding: var(--calculate-it-padding);
+    background: var(--calculate-it-bg-color);
+    border-radius: var(--calculate-it-border-radius);
   }
 
   .calc-title {
-    font-size: var(--calculate-title-font-size);
+    font-size: var(--calculate-it-title-font-size);
     font-weight: 600;
     text-transform: capitalize;
-    opacity: var(--calculate-title-opacity);
+    opacity: var(--calculate-it-title-opacity);
   }
 
   /* Calculated Result Display */
   .calc-result {
-    padding: var(--calculate-input-padding);
-    background: var(--calculate-result-bg);
-    border-radius: var(--calculate-border-radius);
+    padding: var(--calculate-it-input-padding);
+    background: var(--calculate-it-result-bg);
+    border-radius: var(--calculate-it-border-radius);
     font-weight: 700;
-    font-size: var(--calculate-result-font-size);
-    color: var(--calculate-result-color);
-    font-family: var(--calculate-font-mono);
+    font-size: var(--calculate-it-result-font-size);
+    color: var(--calculate-it-result-color);
+    font-family: var(--calculate-it-font-mono);
     text-align: center;
   }
 
   .calc-result.negative {
-    background-color: var(--calculate-negative-bg);
-    color: var(--calculate-negative-color);
+    background-color: var(--calculate-it-negative-bg);
+    color: var(--calculate-it-negative-color);
   }
 
   .calc-formula {
-    font-size: var(--calculate-formula-font-size);
-    font-family: var(--calculate-font-mono);
-    opacity: var(--calculate-formula-opacity);
+    font-size: var(--calculate-it-formula-font-size);
+    font-family: var(--calculate-it-font-mono);
+    opacity: var(--calculate-it-formula-opacity);
     text-align: center;
   }
 

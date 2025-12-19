@@ -233,88 +233,136 @@ calc.recalculate();
 
 ## CSS Custom Properties API
 
-The `<calculate>` element exposes 25+ CSS variables for complete styling control.
+The `<calculate-it>` element exposes 27+ CSS variables for complete styling control. All styles can be overridden even when the component is rendered in Shadow DOM or iframe using these CSS custom properties.
 
 ### Colors
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--calculate-bg-color` | `#fff` | Background color |
-| `--calculate-text-color` | `#000` | Text color |
-| `--calculate-input-bg` | `#f8f9fa` | Input background |
-| `--calculate-input-border` | `#dee2e6` | Input border color |
-| `--calculate-input-text` | `#000` | Input text color |
-| `--calculate-input-focus-border` | `#0066cc` | Input focus border |
-| `--calculate-result-bg` | `#e8f5e9` | Result background |
-| `--calculate-result-color` | `#2e7d32` | Result text color |
-| `--calculate-negative-bg` | `#fee2e2` | Negative value background |
-| `--calculate-negative-color` | `#991b1b` | Negative value text |
-| `--calculate-heading-color` | `inherit` | Section heading color |
+| `--calculate-it-bg-color` | `#fff` | Background color |
+| `--calculate-it-text-color` | `#000` | Text color |
+| `--calculate-it-input-bg` | `#f8f9fa` | Input background |
+| `--calculate-it-input-border` | `#dee2e6` | Input border color |
+| `--calculate-it-input-text` | `#000` | Input text color |
+| `--calculate-it-input-focus-border` | `#0066cc` | Input focus border |
+| `--calculate-it-input-label-color` | `rgba(0, 0, 0, 0.5)` | Input label color (unfocused) |
+| `--calculate-it-input-label-focus-color` | `rgba(0, 0, 0, 0.7)` | Input label color (focused) |
+| `--calculate-it-result-bg` | `#e8f5e9` | Result background |
+| `--calculate-it-result-color` | `#2e7d32` | Result text color |
+| `--calculate-it-negative-bg` | `#fee2e2` | Negative value background |
+| `--calculate-it-negative-color` | `#991b1b` | Negative value text |
+| `--calculate-it-heading-color` | `inherit` | Section heading color |
 
 ### Spacing
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--calculate-gap` | `2rem` | Gap between sections |
-| `--calculate-section-gap` | `0.75rem` | Gap between fields |
-| `--calculate-padding` | `0.75rem` | Field padding |
-| `--calculate-input-padding` | `0.5rem` | Input padding |
+| `--calculate-it-gap` | `2rem` | Gap between sections |
+| `--calculate-it-section-gap` | `0.75rem` | Gap between fields |
+| `--calculate-it-padding` | `0.75rem` | Field padding |
+| `--calculate-it-input-padding` | `0.5rem` | Input padding |
 
 ### Typography
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--calculate-font-family` | `system-ui, sans-serif` | Font family |
-| `--calculate-font-mono` | `Monaco, monospace` | Monospace font |
-| `--calculate-result-font-size` | `1.25rem` | Result font size |
-| `--calculate-title-font-size` | `0.75rem` | Title font size |
-| `--calculate-formula-font-size` | `0.75rem` | Formula font size |
+| `--calculate-it-font-family` | `system-ui, sans-serif` | Font family |
+| `--calculate-it-font-mono` | `Monaco, monospace` | Monospace font |
+| `--calculate-it-result-font-size` | `1.25rem` | Result font size |
+| `--calculate-it-title-font-size` | `0.75rem` | Title font size |
+| `--calculate-it-formula-font-size` | `0.75rem` | Formula font size |
 
 ### Layout & Effects
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--calculate-border-radius` | `0.375rem` | Border radius |
-| `--calculate-border-width` | `1px` | Border width |
-| `--calculate-min-column-width` | `200px` | Min column width |
-| `--calculate-title-opacity` | `0.7` | Title opacity |
-| `--calculate-formula-opacity` | `0.6` | Formula opacity |
+| `--calculate-it-border-radius` | `0.375rem` | Border radius |
+| `--calculate-it-border-width` | `1px` | Border width |
+| `--calculate-it-min-column-width` | `200px` | Min column width |
+| `--calculate-it-title-opacity` | `0.7` | Title opacity |
+| `--calculate-it-formula-opacity` | `0.6` | Formula opacity |
+| `--calculate-it-input-opacity-unfocused` | `0.8` | Input result opacity (unfocused) |
 
 ## Theming Examples
 
 ### Dark Mode
 
 ```css
-calculate.dark-mode {
-  --calculate-bg-color: #1a1a1a;
-  --calculate-text-color: #e5e5e5;
-  --calculate-input-bg: #2d2d2d;
-  --calculate-input-border: #404040;
-  --calculate-result-bg: #1e3a20;
-  --calculate-result-color: #4ade80;
+calculate-it.dark-mode {
+  --calculate-it-bg-color: #1a1a1a;
+  --calculate-it-text-color: #e5e5e5;
+  --calculate-it-input-bg: #2d2d2d;
+  --calculate-it-input-border: #404040;
+  --calculate-it-input-label-color: rgba(255, 255, 255, 0.5);
+  --calculate-it-input-label-focus-color: rgba(255, 255, 255, 0.7);
+  --calculate-it-result-bg: #1e3a20;
+  --calculate-it-result-color: #4ade80;
 }
 ```
 
 ### Brand Colors
 
 ```css
-calculate {
-  --calculate-result-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --calculate-result-color: white;
-  --calculate-border-radius: 12px;
-  --calculate-input-focus-border: #667eea;
+calculate-it {
+  --calculate-it-result-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --calculate-it-result-color: white;
+  --calculate-it-border-radius: 12px;
+  --calculate-it-input-focus-border: #667eea;
 }
 ```
 
 ### Compact Layout
 
 ```css
-calculate.compact {
-  --calculate-gap: 1rem;
-  --calculate-padding: 0.5rem;
-  --calculate-result-font-size: 1rem;
-  --calculate-min-column-width: 150px;
+calculate-it.compact {
+  --calculate-it-gap: 1rem;
+  --calculate-it-padding: 0.5rem;
+  --calculate-it-result-font-size: 1rem;
+  --calculate-it-min-column-width: 150px;
 }
+```
+
+### Shadow DOM Override
+
+CSS variables naturally pierce Shadow DOM boundaries, making theming straightforward:
+
+```html
+<style>
+  /* Override from parent document - works even with Shadow DOM */
+  .my-calculator {
+    --calculate-it-result-bg: #f0f9ff;
+    --calculate-it-result-color: #0369a1;
+  }
+</style>
+
+<calculate-it class="my-calculator"></calculate-it>
+```
+
+### iframe Override
+
+For components rendered in iframes, set CSS variables on the iframe's document:
+
+```javascript
+// Parent window code
+const iframe = document.querySelector('iframe');
+iframe.onload = () => {
+  const iframeDoc = iframe.contentDocument;
+  const calculator = iframeDoc.querySelector('calculate-it');
+
+  // Method 1: Set variables on the element
+  calculator.style.setProperty('--calculate-it-result-bg', '#f0f9ff');
+  calculator.style.setProperty('--calculate-it-result-color', '#0369a1');
+
+  // Method 2: Inject a style tag
+  const style = iframeDoc.createElement('style');
+  style.textContent = `
+    calculate-it {
+      --calculate-it-result-bg: #f0f9ff;
+      --calculate-it-result-color: #0369a1;
+    }
+  `;
+  iframeDoc.head.appendChild(style);
+};
 ```
 
 ## TypeScript
